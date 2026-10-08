@@ -130,7 +130,7 @@ var cur=+g("day",0);
 function items(n){var r=g("dd"+n,"");if(r){try{return JSON.parse(r)}catch(e){}}return D[n][3].map(function(x,i){var k="d"+n+"i"+i;return [x[0],g(k+"t",x[1]),g(k+"n",x[2]),x[3]]})}
 function saveItems(n,a){s("dd"+n,JSON.stringify(a))}
 function tm(v){var p=/(\d+):(\d+)/.exec(v);return p?+p[1]*60+ +p[2]:9999}
-function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='dayhd' style='background:var(--c"+(n%6)+")'><small>Day "+(n+1)+"・"+d[0]+"（"+d[1]+"）</small><h2>"+d[2]+"</h2></div><div class='tl'>";
+function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='dayhd' style='background:var(--c4)'><small class='"+c+"' data-hd='dh"+n+"'>"+esc(g("dh"+n,"Day "+(n+1)+"・"+d[0]+"（"+d[1]+"）"))+"</small><h2 class='"+c+"' data-hd='dt"+n+"'>"+esc(g("dt"+n,d[2]))+"</h2></div><div class='tl'>";
 a.forEach(function(x,i){var tg=/起飛|抵達神戶機場/.test(x[1])?"<svg class='pl'><use href='#plane'/></svg> 航班":/到|出發|搭|電車|Liner|近鐵|阪神|地鐵|退房|還和服/.test(x[1])?"🚃 交通":"";h+="<div class='it'><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'>"+(tg?"<span class='tg'>"+tg+"</span><br>":"")+"<h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
 if(ed)h+="<p class='ed' data-i='"+i+"' data-f='3' style='font-size:12px;min-height:18px'>"+esc(x[3]||"")+"</p><p style='font-size:11px'>↑ 地圖搜尋字，留空就沒有地圖按鈕</p><button data-del='"+i+"' class='go' style='background:var(--sub);border:0'>刪除</button>";
 else if(x[3])h+="<a class='go' target='_blank' rel='noopener' href='"+mp(x[3])+"'>在地圖開啟</a>";
@@ -139,10 +139,11 @@ if(ed)h+="<button id='add' class='go' style='border:0;width:100%;padding:11px;fo
 h+="<div class='cost'>今日預估花費：<span class='ed' data-k='c"+n+"'>約 ¥"+d[4].toLocaleString()+"／人</span></div>";
 document.getElementById("day").innerHTML=h;
 [].forEach.call(document.querySelectorAll("[data-f]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var a=items(cur),i=+el.getAttribute("data-i"),f=+el.getAttribute("data-f");if(!a[i])return;a[i][f]=el.textContent.trim();if(f==0){a=a.map(function(x,j){return [x,j]}).sort(function(p,q){return tm(p[0][0])-tm(q[0][0])||p[1]-q[1]}).map(function(z){return z[0]});saveItems(cur,a);showDay(cur)}else saveItems(cur,a)})});
+[].forEach.call(document.querySelectorAll("[data-hd]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var k=el.getAttribute("data-hd"),v=el.textContent.trim();try{if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(er){}})});
 [].forEach.call(document.querySelectorAll(".chip"),function(c,i){c.classList.toggle("on",i==n)});bindEd()}
 document.addEventListener("click",function(e){var t=e.target,x=t.getAttribute&&t.getAttribute("data-del");if(x!==null&&x!==undefined){var a=items(cur);a.splice(+x,1);saveItems(cur,a);showDay(cur);return}
 if(t.id=="add"){var a=items(cur);a.push(["12:00","新景點","",""]);saveItems(cur,a);showDay(cur)}
-if(t.id=="rst"&&confirm("確定還原這一天的預設行程？你的修改會消失")){try{localStorage.removeItem("dd"+cur);D[cur][3].forEach(function(_,i){localStorage.removeItem("d"+cur+"i"+i+"t");localStorage.removeItem("d"+cur+"i"+i+"n")})}catch(er){}showDay(cur)}});
+if(t.id=="rst"&&confirm("確定還原這一天的預設行程？你的修改會消失")){try{localStorage.removeItem("dd"+cur);localStorage.removeItem("dh"+cur);localStorage.removeItem("dt"+cur);D[cur][3].forEach(function(_,i){localStorage.removeItem("d"+cur+"i"+i+"t");localStorage.removeItem("d"+cur+"i"+i+"n")})}catch(er){}showDay(cur)}});
 document.getElementById("chips").innerHTML=D.map(function(d,i){return "<button class='chip' onclick='showDay("+i+")'><i class='mk'><svg class='pl'><use href='#plane'/></svg></i><b>"+d[0]+"</b>"+d[1]+"</button>"}).join("");
 document.getElementById("nav").innerHTML=L.map(function(l,i){return "<button onclick='tab("+i+")'><i>"+l[1]+"</i>"+l[0]+"</button>"}).join("");
 function tab(n){[].forEach.call(document.querySelectorAll(".tab"),function(t,i){t.classList.toggle("on",i==n)});[].forEach.call(document.querySelectorAll("nav button"),function(b,i){b.classList.toggle("on",i==n)});window.scrollTo(0,0)}
