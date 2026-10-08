@@ -2,14 +2,14 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#634035">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>大阪六日遊 2027</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#faf3f4;--card:#fff;--ink:#4a2f3a;--sub:#8a6a75;--line:#efdde2;--wave:#b85f7a;--gold:#e9bcc5;--red:#c4647c;--hd:#a65d73;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1a21;--card:#3a252e;--ink:#f6e6ea;--sub:#c9a9b3;--line:#54383f;--wave:#e29ab0;--hd:#6b3446}}
-:root[data-theme="dark"]{--bg:#2a1a21;--card:#3a252e;--ink:#f6e6ea;--sub:#c9a9b3;--line:#54383f;--wave:#e29ab0;--hd:#6b3446}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Noto Sans TC",-apple-system,"PingFang TC",sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
@@ -52,11 +52,51 @@ nav button{flex:1;border:0;background:none;color:var(--sub);font:inherit;font-si
 nav button i{display:block;font-style:normal;font-size:21px;line-height:1.2}
 nav button.on{color:var(--wave);font-weight:700}
 </style>
+<style>
+:root{--bg:#FDE2E4;--card:#FFF5F6;--ink:#634035;--sub:#8A6458;--line:#634035;--o:3px solid #634035;--hd:#634035;--gold:#F4BCC2;--red:#634035;--onr:#FDE2E4;--ct:#634035;--cg:#634035;--c0:#F4BCC2;--c1:#FFF0F1;--c2:#F8D0D3;--c3:#F1CFC6;--c4:#FAD9DC;--c5:#EDC3C0}
+body{font-family:"Zen Maru Gothic","Noto Sans TC",-apple-system,"PingFang TC",sans-serif;font-weight:500}
+.pl{width:22px;height:16px;vertical-align:-3px;color:#634035}
+header{background:var(--hd);color:#FDE2E4;border-bottom:3px solid #634035;background-image:none;padding:20px 16px 16px;min-height:150px}
+header h1{font-weight:900;letter-spacing:1px}header p{opacity:1;color:#FDE2E4}
+header svg.il{position:absolute;right:8px;bottom:10px;width:116px;height:97px}
+#cd{display:inline-block;margin-top:10px;background:var(--gold);color:var(--cg);border:var(--o);border-radius:20px;padding:2px 14px;font-weight:900;font-size:14px}
+header #cd{background:#FDE2E4;color:#634035;border-color:#FDE2E4}
+#edit{background:#FDE2E4;color:#634035;border:var(--o);font-weight:700;padding:3px 12px}
+body.editing #edit{background:var(--gold);color:var(--cg)}
+.ft{border:var(--o);border-radius:16px;padding:10px 14px;margin-bottom:12px;color:var(--ct)}
+.ft b{font-size:12px}.ft .r{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:24px;line-height:1.2}
+.ft .r i{flex:1;border-top:3px dotted var(--line);margin:0 8px;position:relative;top:2px}
+.ft small{display:flex;justify-content:space-between;font-size:12px}
+.chips{gap:0;position:relative;padding:4px 0 14px;justify-content:space-between}
+.chips:before{content:"";position:absolute;left:14px;right:14px;bottom:22px;border-top:3px dotted var(--line)}
+.chip{position:relative;border:0;background:none;color:var(--ink);padding:0 6px;font-size:12px}
+.chip b{font-size:14px}
+.chip .mk{display:block;height:30px;font-style:normal;visibility:hidden}
+.chip .mk .pl{width:40px;height:29px}
+.chip:after{content:"";display:block;width:12px;height:12px;border-radius:50%;background:var(--card);border:var(--o);margin:0 auto 4px}
+.chip.on .mk{visibility:visible}.chip.on:after{background:var(--red)}
+.chip.on{background:none;color:var(--ink)}.chip.on b{background:var(--red);color:var(--onr);border-radius:10px;padding:0 6px}
+.dayhd{border:var(--o);border-radius:16px;padding:10px 14px;margin:2px 0 14px;color:var(--ct)}
+.dayhd small{font-weight:700}.dayhd h2{margin:0;font-size:20px;font-weight:900}
+.tl{border-left:3px dotted var(--line);margin-left:8px;padding-left:16px}
+.it{position:relative;border:var(--o);border-radius:14px;box-shadow:0 3px 0 var(--line)}
+.it:before{content:"";position:absolute;left:-26px;top:16px;width:11px;height:11px;border-radius:50%;background:var(--card);border:var(--o)}
+.tm{color:var(--sub);font-weight:900}
+.tg{display:inline-block;background:var(--gold);color:var(--cg);border:2px solid var(--line);border-radius:8px;padding:0 7px;font-size:11px;font-weight:900;margin-bottom:3px}
+.tg .pl{color:var(--cg);width:18px;height:13px;vertical-align:-2px}
+.go{background:var(--gold);color:var(--cg);border:2px solid var(--line);border-radius:8px;padding:2px 10px;font-weight:900}
+.cost{border:var(--o);border-left:var(--o);border-radius:14px;background:var(--c1);color:var(--ct)}
+.box{border:var(--o);border-radius:16px;box-shadow:0 3px 0 var(--line)}
+.box h3{font-weight:900}
+.row{border-bottom:2px dotted var(--line)}
+nav{background:var(--card);border-top:var(--o)}
+nav button{font-weight:700}nav button.on{color:var(--ink)}nav button.on i{background:var(--c0);border:2px solid var(--line);border-radius:12px;width:44px;margin:0 auto 2px}
+</style>
 </head>
-<body>
-<header><button id="edit">編輯</button><h1>大阪六日遊</h1><p>2027/1/2 – 1/7・4 位成人・大眾運輸</p></header>
+<body><svg width="0" height="0" style="position:absolute"><symbol id="plane" viewBox="0 0 48 34" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M10 15L3 3l11 5z" fill="#F4A9B2"/><path d="M19 21l-9 12h17l8-12z" fill="#F4A9B2"/><ellipse cx="25" cy="18" rx="19" ry="9.5" fill="#FFF5F6"/><circle cx="27" cy="16.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="35" cy="16.5" r="1.3" fill="currentColor" stroke="none"/><ellipse cx="24.5" cy="20.5" rx="2.3" ry="1.4" fill="#E58FAE" stroke="none"/><ellipse cx="37.5" cy="20.5" rx="2.3" ry="1.4" fill="#E58FAE" stroke="none"/><path d="M29.5 20.5q2 2 4 0" stroke-width="1.8"/></symbol></svg>
+<header><button id="edit">編輯</button><svg class="il" viewBox="0 0 120 100" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="14" width="4.5" height="82" rx="2.2" fill="#F4BCC2"/><circle cx="18.3" cy="12" r="4" fill="#F4BCC2"/><path d="M22 20q12-8 24 0t24 0t24 0v52q-12-8-24 0t-24 0t-24 0z" fill="#FFF5F6"/><circle cx="58" cy="46" r="16" fill="#E4606D"/><g fill="#634035"><circle cx="51.5" cy="44" r="2.4"/><circle cx="64.5" cy="44" r="2.4"/></g><g fill="#fff"><circle cx="52.3" cy="43.1" r="0.8"/><circle cx="65.3" cy="43.1" r="0.8"/></g><g fill="#F4A9B2"><ellipse cx="46.5" cy="50" rx="3.4" ry="2.2"/><ellipse cx="69.5" cy="50" rx="3.4" ry="2.2"/></g><path d="M54.4 49.5q3.6 3.8 7.2 0" fill="none" stroke="#634035" stroke-width="1.8"/><g fill="#F4BCC2"><path d="M106 14l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M110 56l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z"/></g></svg><h1>大阪六日遊</h1><p>2027/1/2 – 1/7・4 位成人・大眾運輸</p><span id="cd"></span></header>
 <main>
-<section class="tab on" id="t0"><div class="chips" id="chips"></div><div id="day"></div></section>
+<section class="tab on" id="t0"><div class="ft" style="background:var(--c3)"><b><svg class="pl"><use href="#plane"/></svg> 1/2（六）去程・星宇 JX834</b><div class="r"><span>07:00</span><i></i><span>10:30</span></div><small><span>桃園 T1</span><span>神戶機場 T2</span></small></div><div class="ft" style="background:var(--c2)"><b><svg class="pl" style="transform:scaleX(-1)"><use href="#plane"/></svg> 1/7（四）回程・星宇 JX835</b><div class="r"><span>11:30</span><i></i><span>13:50</span></div><small><span>神戶機場 T2</span><span>桃園 T1</span></small></div><div class="chips" id="chips"></div><div id="day"></div></section>
 <section class="tab" id="t1"><div id="tr"></div></section>
 <section class="tab" id="t2">
 <div class="box"><h3>住宿（點編輯後填寫）</h3>
@@ -88,11 +128,11 @@ var cur=+g("day",0);
 function items(n){var r=g("dd"+n,"");if(r){try{return JSON.parse(r)}catch(e){}}return D[n][3].map(function(x,i){var k="d"+n+"i"+i;return [x[0],g(k+"t",x[1]),g(k+"n",x[2]),x[3]]})}
 function saveItems(n,a){s("dd"+n,JSON.stringify(a))}
 function tm(v){var p=/(\d+):(\d+)/.exec(v);return p?+p[1]*60+ +p[2]:9999}
-function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='daytitle'>"+d[0]+"（"+d[1]+"）"+d[2]+"</div>";
-a.forEach(function(x,i){h+="<div class='it'><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'><h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
+function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='dayhd' style='background:var(--c"+(n%6)+")'><small>Day "+(n+1)+"・"+d[0]+"（"+d[1]+"）</small><h2>"+d[2]+"</h2></div><div class='tl'>";
+a.forEach(function(x,i){var tg=/起飛|抵達神戶機場/.test(x[1])?"<svg class='pl'><use href='#plane'/></svg> 航班":/到|出發|搭|電車|Liner|近鐵|阪神|地鐵|退房|還和服/.test(x[1])?"🚃 交通":"";h+="<div class='it'><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'>"+(tg?"<span class='tg'>"+tg+"</span><br>":"")+"<h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
 if(ed)h+="<p class='ed' data-i='"+i+"' data-f='3' style='font-size:12px;min-height:18px'>"+esc(x[3]||"")+"</p><p style='font-size:11px'>↑ 地圖搜尋字，留空就沒有地圖按鈕</p><button data-del='"+i+"' class='go' style='background:var(--sub);border:0'>刪除</button>";
 else if(x[3])h+="<a class='go' target='_blank' rel='noopener' href='"+mp(x[3])+"'>在地圖開啟</a>";
-h+="</div></div>"});
+h+="</div></div>"});h+="</div>";
 if(ed)h+="<button id='add' class='go' style='border:0;width:100%;padding:11px;font-size:15px;margin:0 0 8px'>＋ 新增景點</button><button id='rst' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:0'>還原這一天的預設行程</button>";
 h+="<div class='cost'>今日預估花費：<span class='ed' data-k='c"+n+"'>約 ¥"+d[4].toLocaleString()+"／人</span></div>";
 document.getElementById("day").innerHTML=h;
@@ -101,7 +141,7 @@ document.getElementById("day").innerHTML=h;
 document.addEventListener("click",function(e){var t=e.target,x=t.getAttribute&&t.getAttribute("data-del");if(x!==null&&x!==undefined){var a=items(cur);a.splice(+x,1);saveItems(cur,a);showDay(cur);return}
 if(t.id=="add"){var a=items(cur);a.push(["12:00","新景點","",""]);saveItems(cur,a);showDay(cur)}
 if(t.id=="rst"&&confirm("確定還原這一天的預設行程？你的修改會消失")){try{localStorage.removeItem("dd"+cur);D[cur][3].forEach(function(_,i){localStorage.removeItem("d"+cur+"i"+i+"t");localStorage.removeItem("d"+cur+"i"+i+"n")})}catch(er){}showDay(cur)}});
-document.getElementById("chips").innerHTML=D.map(function(d,i){return "<button class='chip' onclick='showDay("+i+")'><b>"+d[0]+"</b>"+d[1]+"</button>"}).join("");
+document.getElementById("chips").innerHTML=D.map(function(d,i){return "<button class='chip' onclick='showDay("+i+")'><i class='mk'><svg class='pl'><use href='#plane'/></svg></i><b>"+d[0]+"</b>"+d[1]+"</button>"}).join("");
 document.getElementById("nav").innerHTML=L.map(function(l,i){return "<button onclick='tab("+i+")'><i>"+l[1]+"</i>"+l[0]+"</button>"}).join("");
 function tab(n){[].forEach.call(document.querySelectorAll(".tab"),function(t,i){t.classList.toggle("on",i==n)});[].forEach.call(document.querySelectorAll("nav button"),function(b,i){b.classList.toggle("on",i==n)});window.scrollTo(0,0)}
 function esc(v){return v.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
@@ -151,6 +191,7 @@ if((v=a("data-bd"))!=null){BD.splice(+v,1);sb();rb();return}
 if(t.id=="bad"){BD.push(["新項目",0]);sb();rb();return}
 if(t.id=="brs"&&confirm("確定還原預設預算？你的修改會消失")){BD=JSON.parse(JSON.stringify(BD0));sb();s("rate","0.205");rb()}});
 rt();rb();
+(function(){var n=Math.ceil((new Date(2027,0,2)-new Date())/864e5);document.getElementById("cd").textContent=n>0?"出發倒數 "+n+" 天":n>-6?"旅途愉快 🎉":"旅程結束"})();
 showDay(cur);tab(0);bindEd();hm();
 </script>
 </body>
