@@ -39,7 +39,9 @@ main{padding:14px}
 .box ul{padding-left:18px;margin:4px 0}
 .row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
 .row:last-child{border:0}
-.row span:last-child{font-weight:700;white-space:nowrap}
+.row .pr{font-weight:700;white-space:nowrap}
+.x{flex:none;border:0;background:none;color:var(--sub);font-size:17px;padding:2px 8px}
+body.editing .pr{min-width:56px;display:inline-block;text-align:right}
 label.ck{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14px;color:var(--ink)}
 label.ck input{width:20px;height:20px;margin-top:2px;accent-color:var(--wave)}
 label.ck input:checked+span{text-decoration:line-through;opacity:.5}
@@ -55,12 +57,7 @@ nav button.on{color:var(--wave);font-weight:700}
 <header><button id="edit">編輯</button><h1>大阪六日遊</h1><p>2027/1/2 – 1/7・4 位成人・大眾運輸</p></header>
 <main>
 <section class="tab on" id="t0"><div class="chips" id="chips"></div><div id="day"></div></section>
-<section class="tab" id="t1">
-<div class="box"><h3>抵達：神戶機場 → 難波</h3><div class="row"><span>Port Liner 到三宮（約 18 分）</span><span>¥330</span></div><div class="row"><span>三宮轉阪神電車到難波（約 40 分）</span><span>約 ¥420</span></div></div>
-<div class="box"><h3>市區移動</h3><div class="row"><span>難波 → 大阪城（地鐵）</span><span>約 ¥240</span></div><div class="row"><span>難波 → 京都河原町（御堂筋線＋阪急，約 1 小時 15 分）</span><span>約 ¥650</span></div><div class="row"><span>難波 → 勝尾寺（北大阪急行＋巴士，約 1 小時 15 分）</span><span>約 ¥600</span></div><div class="row"><span>近鐵難波 → 近鐵奈良（約 40 分）</span><span>約 ¥680</span></div></div>
-<div class="box"><h3>回程：難波 → 神戶機場</h3><p>1/7 06:30 退房，阪神到三宮，再轉 Port Liner，約 08:45 抵達，11:30 起飛。</p></div>
-<div class="box"><p>費用與班次為估算，新年期間公車可能調整，出發前用 Google Maps 再確認。建議用 ICOCA 或手機 Suica 刷卡。</p></div>
-</section>
+<section class="tab" id="t1"><div id="tr"></div></section>
 <section class="tab" id="t2">
 <div class="box"><h3>住宿（點編輯後填寫）</h3>
 <p>飯店名稱</p><p class="ed" data-k="hn" style="color:var(--ink);font-weight:700">尚未訂，點此填入</p>
@@ -88,27 +85,72 @@ function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){r
 function s(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function mp(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q)}
 var cur=+g("day",0);
-function showDay(n){cur=n;s("day",n);var d=D[n],h="<div class='daytitle'>"+d[0]+"（"+d[1]+"）"+d[2]+"</div>";
-d[3].forEach(function(x,i){var k="d"+n+"i"+i;h+="<div class='it'><div class='tm'>"+x[0]+"</div><div class='bd'><h3 class='ed' data-k='"+k+"t'>"+g(k+"t",x[1])+"</h3><p class='ed' data-k='"+k+"n'>"+g(k+"n",x[2])+"</p>"+(x[3]?"<a class='go' target='_blank' rel='noopener' href='"+mp(x[3])+"'>在地圖開啟</a>":"")+"</div></div>"});
-h+="<div class='cost'>今日預估花費：約 ¥"+d[4].toLocaleString()+"／人</div>";
+function items(n){var r=g("dd"+n,"");if(r){try{return JSON.parse(r)}catch(e){}}return D[n][3].map(function(x,i){var k="d"+n+"i"+i;return [x[0],g(k+"t",x[1]),g(k+"n",x[2]),x[3]]})}
+function saveItems(n,a){s("dd"+n,JSON.stringify(a))}
+function tm(v){var p=/(\d+):(\d+)/.exec(v);return p?+p[1]*60+ +p[2]:9999}
+function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='daytitle'>"+d[0]+"（"+d[1]+"）"+d[2]+"</div>";
+a.forEach(function(x,i){h+="<div class='it'><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'><h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
+if(ed)h+="<p class='ed' data-i='"+i+"' data-f='3' style='font-size:12px;min-height:18px'>"+esc(x[3]||"")+"</p><p style='font-size:11px'>↑ 地圖搜尋字，留空就沒有地圖按鈕</p><button data-del='"+i+"' class='go' style='background:var(--sub);border:0'>刪除</button>";
+else if(x[3])h+="<a class='go' target='_blank' rel='noopener' href='"+mp(x[3])+"'>在地圖開啟</a>";
+h+="</div></div>"});
+if(ed)h+="<button id='add' class='go' style='border:0;width:100%;padding:11px;font-size:15px;margin:0 0 8px'>＋ 新增景點</button><button id='rst' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:0'>還原這一天的預設行程</button>";
+h+="<div class='cost'>今日預估花費：<span class='ed' data-k='c"+n+"'>約 ¥"+d[4].toLocaleString()+"／人</span></div>";
 document.getElementById("day").innerHTML=h;
+[].forEach.call(document.querySelectorAll("[data-f]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var a=items(cur),i=+el.getAttribute("data-i"),f=+el.getAttribute("data-f");if(!a[i])return;a[i][f]=el.textContent.trim();if(f==0){a=a.map(function(x,j){return [x,j]}).sort(function(p,q){return tm(p[0][0])-tm(q[0][0])||p[1]-q[1]}).map(function(z){return z[0]});saveItems(cur,a);showDay(cur)}else saveItems(cur,a)})});
 [].forEach.call(document.querySelectorAll(".chip"),function(c,i){c.classList.toggle("on",i==n)});bindEd()}
+document.addEventListener("click",function(e){var t=e.target,x=t.getAttribute&&t.getAttribute("data-del");if(x!==null&&x!==undefined){var a=items(cur);a.splice(+x,1);saveItems(cur,a);showDay(cur);return}
+if(t.id=="add"){var a=items(cur);a.push(["12:00","新景點","",""]);saveItems(cur,a);showDay(cur)}
+if(t.id=="rst"&&confirm("確定還原這一天的預設行程？你的修改會消失")){try{localStorage.removeItem("dd"+cur);D[cur][3].forEach(function(_,i){localStorage.removeItem("d"+cur+"i"+i+"t");localStorage.removeItem("d"+cur+"i"+i+"n")})}catch(er){}showDay(cur)}});
 document.getElementById("chips").innerHTML=D.map(function(d,i){return "<button class='chip' onclick='showDay("+i+")'><b>"+d[0]+"</b>"+d[1]+"</button>"}).join("");
 document.getElementById("nav").innerHTML=L.map(function(l,i){return "<button onclick='tab("+i+")'><i>"+l[1]+"</i>"+l[0]+"</button>"}).join("");
 function tab(n){[].forEach.call(document.querySelectorAll(".tab"),function(t,i){t.classList.toggle("on",i==n)});[].forEach.call(document.querySelectorAll("nav button"),function(b,i){b.classList.toggle("on",i==n)});window.scrollTo(0,0)}
-var X=[];try{X=JSON.parse(g("cx","[]"))}catch(e){}
-function sx(){s("cx",JSON.stringify(X))}
 function esc(v){return v.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
-function rp(){document.getElementById("pack").innerHTML="<h3>行李清單</h3>"+P.map(function(p,i){return "<label class='ck'><input type='checkbox' data-c='p"+i+"'"+(g("p"+i,"")=="1"?" checked":"")+"><span>"+p+"</span></label>"}).join("")+X.map(function(x,i){return "<div style='display:flex;align-items:center'><label class='ck' style='flex:1'><input type='checkbox' data-x='"+i+"'"+(x.c?" checked":"")+"><span>"+esc(x.t)+"</span></label><button data-d='"+i+"' aria-label='刪除' style='border:0;background:none;color:var(--sub);font-size:18px;padding:6px 10px'>✕</button></div>"}).join("")+"<div style='display:flex;gap:8px;margin-top:12px'><input id='ni' placeholder='新增項目，例如：Suica 設定好' style='flex:1;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px'><button id='na' class='go' style='border:0;margin:0'>新增</button></div><p class='tip'>新增的項目只存在你這支手機</p>"}
+var PK=[];(function(){var r=null;try{r=JSON.parse(g("pk","null"))}catch(e){}
+if(!r){r=P.map(function(t,i){return {t:t,c:g("p"+i,"")=="1"?1:0}});var o=[];try{o=JSON.parse(g("cx","[]"))}catch(e){}r=r.concat(o)}PK=r})();
+function sp(){s("pk",JSON.stringify(PK))}
+function rp(){var ed=document.body.classList.contains("editing"),c=ed?"ed":"",tg=ed?"div":"label",h="<h3>行李清單</h3>"+PK.map(function(x,i){return "<div style='display:flex;align-items:center'><"+tg+" class='ck' style='flex:1'><input type='checkbox' data-k2='"+i+"'"+(x.c?" checked":"")+"><span class='"+c+"' data-pi='"+i+"'>"+esc(x.t)+"</span></"+tg+">"+(ed?"<button class='x' data-pd='"+i+"' aria-label='刪除'>✕</button>":"")+"</div>"}).join("")+"<div style='display:flex;gap:8px;margin-top:12px'><input id='ni' placeholder='新增項目，例如：Suica 設定好' style='flex:1;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px'><button id='na' class='go' style='border:0;margin:0'>新增</button></div><p class='tip'>新增與修改只存在你這支手機</p>"+(ed?"<button id='prs' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:0'>還原預設行李清單</button>":"");
+document.getElementById("pack").innerHTML=h;
+[].forEach.call(document.querySelectorAll("[data-pi]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var i=+el.getAttribute("data-pi");if(PK[i]){PK[i].t=el.textContent.trim();sp()}})})}
 rp();
-document.addEventListener("change",function(e){var x=e.target.getAttribute&&e.target.getAttribute("data-x");if(x!==null&&x!==undefined&&X[x]){X[x].c=e.target.checked?1:0;sx()}});
-document.addEventListener("click",function(e){var d=e.target.getAttribute&&e.target.getAttribute("data-d");if(d!==null&&d!==undefined){X.splice(+d,1);sx();rp();return}if(e.target.id=="na"){var v=document.getElementById("ni").value.trim();if(v){X.push({t:v,c:0});sx();rp()}}});
-document.addEventListener("change",function(e){var c=e.target.getAttribute&&e.target.getAttribute("data-c");if(c)s(c,e.target.checked?"1":"0")});
-var tot=D.reduce(function(a,d){return a+d[4]},0),R=0.205;
-document.getElementById("bud").innerHTML="<h3>每人預估花費（不含機票住宿）</h3>"+D.map(function(d){return "<div class='row'><span>"+d[0]+" "+d[2]+"</span><span>¥"+d[4].toLocaleString()+"</span></div>"}).join("")+"<div class='row'><span>合計（每人）</span><span>¥"+tot.toLocaleString()+"</span></div><div class='row'><span>約合台幣（匯率 "+R+"）</span><span>NT$"+Math.round(tot*R).toLocaleString()+"</span></div><div class='row'><span>4 人合計</span><span>¥"+(tot*4).toLocaleString()+"</span></div><p>不含伴手禮與購物，預算約 NT$2–3 萬／人綽綽有餘。</p>";
-function bindEd(){[].forEach.call(document.querySelectorAll(".ed"),function(el){var k=el.getAttribute("data-k");if(!el._b){el._b=1;if(k.charAt(0)=="h")el.textContent=g(k,el.textContent);el.addEventListener("blur",function(){s(k,el.textContent);if(k=="hn")hm()})}el.contentEditable=document.body.classList.contains("editing")})}
+document.addEventListener("change",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-k2");if(k!=null&&PK[+k]){PK[+k].c=e.target.checked?1:0;sp()}});
+document.addEventListener("click",function(e){var t=e.target,d=t.getAttribute&&t.getAttribute("data-pd");if(d!=null){PK.splice(+d,1);sp();rp();return}
+if(t.id=="na"){var v=document.getElementById("ni").value.trim();if(v){PK.push({t:v,c:0});sp();rp()}}
+if(t.id=="prs"&&confirm("確定還原預設行李清單？你的修改和勾選會清空")){PK=P.map(function(t2){return {t:t2,c:0}});sp();rp()}});
+function bindEd(){[].forEach.call(document.querySelectorAll(".ed"),function(el){var k=el.getAttribute("data-k");if(!k)return;if(!el._b){el._b=1;if(k.charAt(0)=="h"||k.charAt(0)=="c")el.textContent=g(k,el.textContent);el.addEventListener("blur",function(){s(k,el.textContent);if(k=="hn")hm()})}el.contentEditable=document.body.classList.contains("editing")})}
 function hm(){var n=g("hn",""),a=g("ha","");document.getElementById("hmap").href=mp(a&&a!="尚未填寫"?a:(n&&n.indexOf("尚未")<0?n:"難波"))}
-document.getElementById("edit").onclick=function(){var b=document.body.classList.toggle("editing");this.textContent=b?"完成":"編輯";bindEd()};
+document.getElementById("edit").onclick=function(){var b=document.body.classList.toggle("editing");this.textContent=b?"完成":"編輯";bindEd();showDay(cur);rt();rb();rp()};
+function ld(k,d){try{var r=g(k,"");return r?JSON.parse(r):d}catch(e){return d}}
+var TR0=[["抵達：神戶機場 → 難波",[["Port Liner 到三宮（約 18 分）","¥330"],["三宮轉阪神電車到難波（約 40 分）","約 ¥420"]]],["市區移動",[["難波 → 大阪城（地鐵）","約 ¥240"],["難波 → 京都河原町（御堂筋線＋阪急，約 1 小時 15 分）","約 ¥650"],["難波 → 勝尾寺（北大阪急行＋巴士，約 1 小時 15 分）","約 ¥600"],["近鐵難波 → 近鐵奈良（約 40 分）","約 ¥680"]]],["回程：難波 → 神戶機場",[["1/7 06:30 退房，阪神到三宮，再轉 Port Liner，約 08:45 抵達，11:30 起飛",""]]],["提醒",[["費用與班次為估算，新年期間公車可能調整，出發前用 Google Maps 再確認。建議用 Suica 或 ICOCA 刷卡。",""]]]];
+var TR=ld("tr",TR0);function st(){s("tr",JSON.stringify(TR))}
+var BD0=D.map(function(d){return [d[0]+" "+d[2],d[4]]});
+var BD=ld("bd",BD0);function sb(){s("bd",JSON.stringify(BD))}
+function isEd(){return document.body.classList.contains("editing")}
+function rt(){var ed=isEd(),c=ed?"ed":"",h="";
+TR.forEach(function(sec,si){h+="<div class='box'><h3 class='"+c+"' data-t='"+si+",-1,0'>"+esc(sec[0])+"</h3>";
+sec[1].forEach(function(r,ri){h+="<div class='row'><span class='"+c+"' style='flex:1' data-t='"+si+","+ri+",0'>"+esc(r[0])+"</span>"+((r[1]||ed)?"<span class='pr "+c+"' data-t='"+si+","+ri+",1'>"+esc(r[1])+"</span>":"")+(ed?"<button class='x' data-tdr='"+si+","+ri+"' aria-label='刪除'>✕</button>":"")+"</div>"});
+if(ed)h+="<button class='go' data-tar='"+si+"' style='border:0;margin-top:8px'>＋ 新增一列</button> <button class='go' data-tds='"+si+"' style='border:0;background:var(--sub)'>刪除分類</button>";
+h+="</div>"});
+if(ed)h+="<button id='tas' class='go' style='border:0;width:100%;padding:11px;font-size:15px;margin:0 0 8px'>＋ 新增分類</button><button id='trs' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:0'>還原預設交通資訊</button>";
+document.getElementById("tr").innerHTML=h;
+[].forEach.call(document.querySelectorAll("[data-t]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var q=el.getAttribute("data-t").split(","),si=+q[0],ri=+q[1],f=+q[2],v=el.textContent.trim();if(!TR[si])return;if(ri<0)TR[si][0]=v;else if(TR[si][1][ri])TR[si][1][ri][f]=v;st()})})}
+function rb(){var ed=isEd(),c=ed?"ed":"",tot=0,R=parseFloat(g("rate","0.205"))||0.205,h="<h3>每人預估花費（不含機票住宿）</h3>";
+BD.forEach(function(r,i){var n=+r[1]||0;tot+=n;h+="<div class='row'><span class='"+c+"' style='flex:1' data-b='"+i+",0'>"+esc(r[0])+"</span><span class='pr'>¥<span class='"+c+"' data-b='"+i+",1'>"+(ed?n:n.toLocaleString())+"</span></span>"+(ed?"<button class='x' data-bd='"+i+"' aria-label='刪除'>✕</button>":"")+"</div>"});
+if(ed)h+="<button id='bad' class='go' style='border:0;margin:8px 0'>＋ 新增項目</button>";
+h+="<div class='row'><span>合計（每人）</span><span class='pr'>¥"+tot.toLocaleString()+"</span></div><div class='row'><span>約合台幣（匯率 <span class='"+c+"' data-rate='1'>"+R+"</span>）</span><span class='pr'>NT$"+Math.round(tot*R).toLocaleString()+"</span></div><div class='row'><span>4 人合計</span><span class='pr'>¥"+(tot*4).toLocaleString()+"</span></div><p>不含伴手禮與購物，預算約 NT$2–3 萬／人綽綽有餘。</p>";
+if(ed)h+="<button id='brs' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:8px 0 0'>還原預設預算</button>";
+document.getElementById("bud").innerHTML=h;
+[].forEach.call(document.querySelectorAll("[data-b]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var q=el.getAttribute("data-b").split(","),i=+q[0],f=+q[1],v=el.textContent.trim();if(!BD[i])return;if(f==0){BD[i][0]=v;sb()}else{BD[i][1]=parseInt(v.replace(/[^\d]/g,""),10)||0;sb();rb()}})});
+[].forEach.call(document.querySelectorAll("[data-rate]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var r=parseFloat(el.textContent);s("rate",r>0?String(r):"0.205");rb()})})}
+document.addEventListener("click",function(e){var t=e.target,v,a=function(k){return t.getAttribute?t.getAttribute(k):null};
+if((v=a("data-tdr"))!=null){var q=v.split(",");TR[+q[0]][1].splice(+q[1],1);st();rt();return}
+if((v=a("data-tar"))!=null){TR[+v][1].push(["新路線",""]);st();rt();return}
+if((v=a("data-tds"))!=null){if(confirm("刪除這個分類？")){TR.splice(+v,1);st();rt()}return}
+if(t.id=="tas"){TR.push(["新分類",[["新項目",""]]]);st();rt();return}
+if(t.id=="trs"&&confirm("確定還原預設的交通資訊？你的修改會消失")){TR=JSON.parse(JSON.stringify(TR0));st();rt();return}
+if((v=a("data-bd"))!=null){BD.splice(+v,1);sb();rb();return}
+if(t.id=="bad"){BD.push(["新項目",0]);sb();rb();return}
+if(t.id=="brs"&&confirm("確定還原預設預算？你的修改會消失")){BD=JSON.parse(JSON.stringify(BD0));sb();s("rate","0.205");rb()}});
+rt();rb();
 showDay(cur);tab(0);bindEd();hm();
 </script>
 </body>
