@@ -97,6 +97,7 @@ nav button{font-weight:700}nav button.on{color:var(--ink)}nav button.on i{backgr
 <style>
 .vp{position:absolute;right:10px;top:10px;border:2px solid var(--line);background:var(--card);color:var(--sub);border-radius:12px;padding:0 10px;font:inherit;font-size:12px;font-weight:900}
 .vp.on{background:var(--red);color:var(--onr)}.it.done{background:var(--c1)}.it.done:before{background:var(--red)}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);margin:0 6px 4px 0;padding:0;font-size:12px;color:var(--ink);vertical-align:middle}
 .cb,.chp{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:5px 12px;font:inherit;font-size:14px;font-weight:700;margin:0 6px 6px 0}
 .cb.on,.chp.on{background:var(--red);color:var(--onr)}
 .in{width:100%;padding:9px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;margin:3px 0 10px}
@@ -144,9 +145,10 @@ function items(n){var r=g("dd"+n,"");if(r){try{var q=JSON.parse(r);q.forEach(fun
 function saveItems(n,a){s("dd"+n,JSON.stringify(a))}
 function tm(v){var p=/(\d+):(\d+)/.exec(v);return p?+p[1]*60+ +p[2]:9999}
 var VS=JSON.parse(g('vs','{}')||'{}');
+var ICL=JSON.parse(g('ic','{}')||'{}'),SW=['#F4BCC2','#F8D9C4','#FBEBB8','#D3EAD6','#D2E4F3','#E4D8F2','#EDC3C0'];
 function showDay(n){cur=n;s("day",n);var d=D[n],a=items(n),ed=document.body.classList.contains("editing"),c=ed?"ed":"",h="<div class='dayhd' style='background:var(--c4)'><small class='"+c+"' data-hd='dh"+n+"'>"+esc(g("dh"+n,"Day "+(n+1)+"・"+d[0]+"（"+d[1]+"）"))+"</small><h2 class='"+c+"' data-hd='dt"+n+"'>"+esc(g("dt"+n,d[2]))+"</h2></div><div class='tl'>";
-a.forEach(function(x,i){var tg=/起飛|抵達神戶機場/.test(x[1])?"<svg class='pl'><use href='#plane'/></svg> 航班":/到|出發|搭|電車|Liner|近鐵|阪神|地鐵|退房|還和服/.test(x[1])?"🚃 交通":"";var dn=VS[x[4]];h+="<div class='it"+(dn?" done":"")+"'><button class='vp"+(dn?" on":"")+"' data-v='"+x[4]+"'>"+(dn?"✓ ":"")+"去過</button><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'>"+(tg?"<span class='tg'>"+tg+"</span><br>":"")+"<h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
-if(ed)h+="<p class='ed' data-i='"+i+"' data-f='3' style='font-size:12px;min-height:18px'>"+esc(x[3]||"")+"</p><p style='font-size:11px'>↑ 地圖搜尋字，留空就沒有地圖按鈕</p><button data-del='"+i+"' class='go' style='background:var(--sub);border:0'>刪除</button>";
+a.forEach(function(x,i){var tg=/起飛|抵達神戶機場/.test(x[1])?"<svg class='pl'><use href='#plane'/></svg> 航班":/到|出發|搭|電車|Liner|近鐵|阪神|地鐵|退房|還和服/.test(x[1])?"🚃 交通":"";var dn=VS[x[4]];h+="<div class='it"+(dn?" done":"")+"'"+(ICL[x[4]]?" style='background:"+ICL[x[4]]+"'":"")+"><button class='vp"+(dn?" on":"")+"' data-v='"+x[4]+"'>"+(dn?"✓ ":"")+"去過</button><div class='tm "+c+"' data-i='"+i+"' data-f='0'>"+esc(x[0])+"</div><div class='bd'>"+(tg?"<span class='tg'>"+tg+"</span><br>":"")+"<h3 class='"+c+"' data-i='"+i+"' data-f='1'>"+esc(x[1])+"</h3><p class='"+c+"' data-i='"+i+"' data-f='2'>"+esc(x[2])+"</p>";
+if(ed)h+="<p class='ed' data-i='"+i+"' data-f='3' style='font-size:12px;min-height:18px'>"+esc(x[3]||"")+"</p><p style='font-size:11px'>↑ 地圖搜尋字，留空就沒有地圖按鈕</p><button data-del='"+i+"' class='go' style='background:var(--sub);border:0'>刪除</button><div class='lb' style='margin-top:8px'>卡片顏色</div><div>"+SW.map(function(c){return "<button class='sw' data-ic='"+x[4]+"|"+c+"' style='background:"+c+"'></button>"}).join("")+"<button class='sw' data-ic='"+x[4]+"|' style='background:var(--card)'>↺</button></div>";
 else if(x[3])h+="<a class='go' target='_blank' rel='noopener' href='"+mp(x[3])+"'>在地圖開啟</a>";
 h+="</div></div>"});h+="</div>";
 if(ed)h+="<button id='add' class='go' style='border:0;width:100%;padding:11px;font-size:15px;margin:0 0 8px'>＋ 新增景點</button><button id='rst' class='go' style='border:0;width:100%;padding:9px;background:var(--sub);margin:0'>還原這一天的預設行程</button>";
@@ -243,6 +245,7 @@ function exp(){var f=new File([csv()],"大阪旅遊帳本.csv",{type:"text/csv"}
 document.addEventListener("input",function(e){var i=e.target.id;if(i=="fi")FM.t=e.target.value;if(i=="fa")FM.a=e.target.value;if(i=="fn")FM.n=e.target.value});
 document.addEventListener("change",function(e){var t=e.target;if(t.id=="fd")FM.d=+t.value;if(t.id=="fp")FM.p=t.value});
 document.addEventListener("click",function(e){var t=e.target,v,a=function(k){return t.getAttribute?t.getAttribute(k):null};
+if((v=a("data-ic"))!=null){var z=v.split("|");if(z[1])ICL[z[0]]=z[1];else delete ICL[z[0]];s("ic",JSON.stringify(ICL));showDay(cur);return}
 if((v=a("data-v"))!=null){VS[v]?delete VS[v]:VS[v]=1;s("vs",JSON.stringify(VS));showDay(cur);return}
 if((v=a("data-cur"))!=null){FM.c=v;rf();return}
 if((v=a("data-k"))!=null){FM.k=v;rf();return}
