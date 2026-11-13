@@ -114,14 +114,7 @@ nav button{font-weight:700}nav button.on{color:var(--ink)}nav button.on i{backgr
 <main>
 <section class="tab on" id="t0"><div class="ft" style="background:var(--c3)"><b><svg class="pl"><use href="#plane"/></svg> 1/2（六）去程・星宇 JX834</b><div class="r"><span>07:00</span><i></i><span>10:30</span></div><small><span>桃園 T1</span><span>神戶機場 T2</span></small></div><div class="ft" style="background:var(--c2)"><b><svg class="pl" style="transform:scaleX(-1)"><use href="#plane"/></svg> 1/7（四）回程・星宇 JX835</b><div class="r"><span>11:30</span><i></i><span>13:50</span></div><small><span>神戶機場 T2</span><span>桃園 T1</span></small></div><div class="chips" id="chips"></div><div id="day"></div></section>
 <section class="tab" id="t1"><div id="tr"></div></section>
-<section class="tab" id="t2">
-<div class="box"><h3>住宿（點編輯後填寫）</h3>
-<p>飯店名稱</p><p class="ed" data-k="hn" style="color:var(--ink);font-weight:700">尚未訂，點此填入</p>
-<p>地址</p><p class="ed" data-k="ha" style="color:var(--ink)">尚未填寫</p>
-<p>入住 / 退房</p><p class="ed" data-k="hc" style="color:var(--ink)">1/2 入住・1/7 退房</p>
-<a class="go" id="hmap" target="_blank" rel="noopener" href="#">在地圖開啟飯店</a></div>
-<div class="box"><h3>選房建議</h3><ul><li>難波或心齋橋站步行 5 分鐘內</li><li>4 人可訂 2 間雙人房或公寓式飯店</li><li>1/2 約中午到，可先寄放行李</li></ul></div>
-</section>
+<section class="tab" id="t2"><div id="ld"></div></section>
 <section class="tab" id="t3"><div class="box" id="pack"></div></section>
 <section class="tab" id="t4"><div id="lf"></div><div id="ll"></div><details class="box"><summary style="font-weight:900;font-size:16px">預估預算（出發前參考）</summary><div id="bud"></div></details>
 <div class="box"><h3>實用資訊</h3><ul><li>出發前先填 Visit Japan Web</li><li>準備 eSIM 或網路分享器</li><li>藥妝滿額可退稅，帶護照</li><li>購買旅平險加不便險</li><li>插頭和台灣相同，不需轉接頭</li></ul></div></section>
@@ -180,7 +173,7 @@ if(t.id=="na"){var v=document.getElementById("ni").value.trim();if(v){PK.push({t
 if(t.id=="prs"&&confirm("確定還原預設行李清單？你的修改和勾選會清空")){PK=P.map(function(t2){return {t:t2,c:0}});sp();rp()}});
 function bindEd(){[].forEach.call(document.querySelectorAll(".ed"),function(el){var k=el.getAttribute("data-k");if(!k)return;if(!el._b){el._b=1;if(k.charAt(0)=="h"||k.charAt(0)=="c")el.textContent=g(k,el.textContent);el.addEventListener("blur",function(){s(k,el.textContent);if(k=="hn")hm()})}el.contentEditable=document.body.classList.contains("editing")})}
 function hm(){var n=g("hn",""),a=g("ha","");document.getElementById("hmap").href=mp(a&&a!="尚未填寫"?a:(n&&n.indexOf("尚未")<0?n:"難波"))}
-document.getElementById("edit").onclick=function(){var b=document.body.classList.toggle("editing");this.textContent=b?"完成":"編輯";bindEd();showDay(cur);rt();rb();rp()};
+document.getElementById("edit").onclick=function(){var b=document.body.classList.toggle("editing");this.textContent=b?"完成":"編輯";bindEd();showDay(cur);rt();rb();rp();rd()};
 function ld(k,d){try{var r=g(k,"");return r?JSON.parse(r):d}catch(e){return d}}
 var TR0=[["抵達：神戶機場 → 難波",[["Port Liner 到三宮（約 18 分）","¥330"],["三宮轉阪神電車到難波（約 40 分）","約 ¥420"]]],["市區移動",[["難波 → 大阪城（地鐵）","約 ¥240"],["難波 → 京都河原町（御堂筋線＋阪急，約 1 小時 15 分）","約 ¥650"],["難波 → 勝尾寺（北大阪急行＋巴士，約 1 小時 15 分）","約 ¥600"],["近鐵難波 → 近鐵奈良（約 40 分）","約 ¥680"]]],["回程：難波 → 神戶機場",[["1/7 06:30 退房，阪神到三宮，再轉 Port Liner，約 08:45 抵達，11:30 起飛",""]]],["提醒",[["費用與班次為估算，新年期間公車可能調整，出發前用 Google Maps 再確認。建議用 Suica 或 ICOCA 刷卡。",""]]]];
 var TR=ld("tr",TR0);function st(){s("tr",JSON.stringify(TR))}
@@ -214,6 +207,15 @@ if(t.id=="bad"){BD.push(["新項目",0]);sb();rb();return}
 if(t.id=="brs"&&confirm("確定還原預設預算？你的修改會消失")){BD=JSON.parse(JSON.stringify(BD0));sb();s("rate","0.205");rb()}});
 rt();rb();
 
+var LD=ld("ld",null);if(!LD){var hn0=g("hn","");LD=hn0&&hn0.indexOf("尚未")<0?[{n:hn0,a:g("ha",""),c:g("hc","")}]:[];s("ld",JSON.stringify(LD))}
+function sd(){s("ld",JSON.stringify(LD))}
+function rd(){var ed=isEd(),c=ed?"ed":"",h="";
+if(!LD.length)h+="<div class='box'><h3>住宿</h3><p class='sm'>還沒有住宿。點右上角「編輯」，再按「＋ 新增住宿」。</p></div>";
+LD.forEach(function(x,i){h+="<div class='box'"+(x.bg?" style='background:"+x.bg+"'":"")+"><h3 class='"+c+"' data-ld='"+i+"|n'>"+esc(x.n)+"</h3><div class='lb'>地址</div><p class='"+c+"' data-ld='"+i+"|a' style='margin:2px 0 8px;font-size:14px'>"+esc(x.a)+"</p><div class='lb'>入住 / 退房</div><p class='"+c+"' data-ld='"+i+"|c' style='margin:2px 0 8px;font-size:14px'>"+esc(x.c)+"</p>"+(x.a||x.n?"<a class='go' target='_blank' rel='noopener' href='"+mp(x.a||x.n)+"'>在地圖開啟</a>":"")+(ed?"<div class='lb' style='margin-top:10px'>卡片顏色</div><div>"+SW.map(function(k){return "<button class='sw' data-lc='"+i+"|"+k+"' style='background:"+k+"'></button>"}).join("")+"<button class='sw' data-lc='"+i+"|' style='background:var(--card)'>↺</button></div><button class='go' data-ldx='"+i+"' style='border:0;background:var(--sub)'>刪除</button>":"")+"</div>"});
+if(ed)h+="<button class='go big' id='ldadd' style='border:0'>＋ 新增住宿</button>";
+document.getElementById("ld").innerHTML=h;
+[].forEach.call(document.querySelectorAll("[data-ld]"),function(el){el.contentEditable=ed;el.addEventListener("blur",function(){var q=el.getAttribute("data-ld").split("|");if(LD[+q[0]]){LD[+q[0]][q[1]]=el.textContent.trim();sd()}})})}
+rd();
 var PPL=["PY","賢","LIN","ZHEN"],LG=ld("lg",[]),ED=null,MSG="";
 function nf(){return {c:"JPY",k:"餐飲",d:-1,t:"",a:"",n:"",p:PPL[0],s:PPL.slice()}}var FM=nf();
 function sl(){s("lg",JSON.stringify(LG))}
@@ -248,6 +250,9 @@ function exp(){var f=new File([csv()],"大阪旅遊帳本.csv",{type:"text/csv"}
 document.addEventListener("input",function(e){var i=e.target.id;if(i=="cl0"||i=="cl1"){var l0=document.getElementById("cl0").value,l1=document.getElementById("cl1").value;CL[cur]=[l0,l1];s("cl",JSON.stringify(CL));rc();return}if(i=="fi")FM.t=e.target.value;if(i=="fa")FM.a=e.target.value;if(i=="fn")FM.n=e.target.value});
 document.addEventListener("change",function(e){var t=e.target;if(t.id=="fd")FM.d=+t.value;if(t.id=="fp")FM.p=t.value});
 document.addEventListener("click",function(e){var t=e.target,v,a=function(k){return t.getAttribute?t.getAttribute(k):null};
+if((v=a("data-lc"))!=null){var q2=v.split("|");if(LD[+q2[0]]){if(q2[1])LD[+q2[0]].bg=q2[1];else delete LD[+q2[0]].bg;sd();rd()}return}
+if(t.id=="ldadd"){LD.push({n:"新住宿",a:"",c:"入住日・退房日"});sd();rd();return}
+if((v=a("data-ldx"))!=null){if(confirm("刪除這間住宿？")){LD.splice(+v,1);sd();rd()}return}
 if((v=a("data-dm"))!=null){var pp=ORD.indexOf(cur),qq=pp+ +v;if(qq>=0&&qq<ORD.length){var t3=ORD[pp];ORD[pp]=ORD[qq];ORD[qq]=t3;s("ord",JSON.stringify(ORD));rc();showDay(cur)}return}
 if((v=a("data-mv"))!=null){var z2=v.split("|"),i2=+z2[0],j2=i2+ +z2[1],a2=items(cur);if(a2[j2]){var tp=a2[i2];a2[i2]=a2[j2];a2[j2]=tp;saveItems(cur,a2);showDay(cur);var cc=document.querySelectorAll(".tl .it")[j2];if(cc)cc.scrollIntoView({block:"center"})}return}
 if((v=a("data-ic"))!=null){var z=v.split("|");if(z[1])ICL[z[0]]=z[1];else delete ICL[z[0]];s("ic",JSON.stringify(ICL));showDay(cur);return}
@@ -262,7 +267,7 @@ if((v=a("data-del2"))!=null){if(confirm("刪除這一筆？")){LG=LG.filter(func
 if(t.id=="xcsv"){exp();return}});
 ra();
 (function(){var n=Math.ceil((new Date(2027,0,2)-new Date())/864e5);document.getElementById("cd").textContent=n>0?"出發倒數 "+n+" 天":n>-6?"旅途愉快 🎉":"旅程結束"})();
-showDay(cur);tab(0);bindEd();hm();
+showDay(cur);tab(0);bindEd();
 </script>
 </body>
 </html>
